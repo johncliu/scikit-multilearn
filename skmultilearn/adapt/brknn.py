@@ -14,7 +14,7 @@ class _BinaryRelevanceKNN(MLClassifierBase):
         self.k = k  # Number of neighbours
         self.copyable_attrs = ['k']
 
-    def fit(self, X, y):
+    def fit(self, X, y, n_jobs=None):
         """Fit classifier with training data
 
         Internally this method uses a sparse CSC representation for y
@@ -27,6 +27,7 @@ class _BinaryRelevanceKNN(MLClassifierBase):
             :code:`(n_samples, n_features)`
         y : numpy.ndaarray or scipy.sparse {0,1}
             binary indicator matrix with label assignments.
+        n_jobs : The number of parallel jobs to run for neighbors search. None means 1.
 
         Returns
         -------
@@ -36,7 +37,7 @@ class _BinaryRelevanceKNN(MLClassifierBase):
         self.train_labelspace = get_matrix_in_format(y, 'csc')
         self._n_samples = self.train_labelspace.shape[0]
         self._n_labels = self.train_labelspace.shape[1]
-        self.knn_ = NearestNeighbors(self.k).fit(X)
+        self.knn_ = NearestNeighbors(self.ki,n_jobs=njobs).fit(X)
         return self
 
     def predict(self, X):
